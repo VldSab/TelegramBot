@@ -1,62 +1,76 @@
-import telebot
+import smtplib
+
 import config
 import keyboard as kb
-import smtplib
-import json
-import pandas as pd
 import numpy as np
+import pandas as pd
+import telebot
+import sched
+import time
+
+
+
 
 bot = telebot.TeleBot(config.TOKEN)
+print('READY FOR WORK')
+
+''' ========= START ============ '''
 
 
 @bot.message_handler(commands=['start'])
 def start(message):
-    bot.send_message(message.chat.id, "Привет, {0.first_name}!".format(message.from_user, bot.get_me()), reply_markup=kb.button_download)
+    bot.send_message(message.chat.id, "Привет, {0.first_name}!".format(message.from_user, bot.get_me()),
+                     reply_markup=kb.button_download)
+    #schedule_content(message.chat.id)
+
+
+''' ========= END START ========= '''
+
+''' ========= GET LIST + SEND EMAIL ============ '''
 
 
 @bot.message_handler(content_types=['contact'])
 def contact(message):
-    print(message.contact)
-    bot.send_message(message.chat.id, 'Спасибо, файл будет у Вас через несколько секунд')
+    cont = {'phone_number': message.contact.phone_number, 'first_name': message.contact.first_name,
+            'last_name': message.contact.last_name,
+            'user_id': message.contact.user_id, 'vcard': message.contact.vcard}
+    print(cont)
+    bot.send_message(message.chat.id, 'Спасибо, файл будет у Вас через несколько секунд',
+                     reply_markup=kb.button_content)
     doc = open('output.xlsx', 'rb')
     bot.send_document(message.chat.id, doc)
 
-    df = pd.DataFrame([message.contact])
+    # decoded = json.loads(cont)
+    df = pd.DataFrame([cont])
 
-    dleads = pd.read_csv('leads.csv', index_col=False)
-
-    if message.contact['user_id'] not in np.array(dleads.user_id):
-        dleads = pd.concat([dleads, df])
-        dleads.to_csv('leads.csv', index_label=False)
+    dleads = pd.read_csv('leads.csv')
+    # print(df)
+    if df.user_id[0] not in np.array(dleads.user_id):
+        print(' ---- NEW CONTACT ----')
+        dleads = pd.concat([dleads, df], axis=0)
+        print(dleads)
+        dleads.to_csv('leads.csv', index=False)
         send_email(HOST, SUBJECT, EMAILS, FROM_ADDR, str(message.contact), PASSWORD)
 
 
-
-def download(message):
-    contact_button = telebot.types.KeyboardButton('Отправить контакты', request_contact=True)
-    print('resr', message)
-    my_keyboard = telebot.types.ReplyKeyboardMarkup([[contact_button]])  # добавляем кнопки
-    return my_keyboard
-
-
 def send_email(host, subject, emails, from_addr, body_text, password):
-        """
+    """
         Send an email
-        """
+    """
 
-        BODY = "\r\n".join((
-            "From: %s" % from_addr,
-            "To: %s" % ', '.join(emails),
-            "Subject: %s" % subject,
-            "",
-            body_text
-        ))
-        print(BODY)
-        server = smtplib.SMTP(host, 587)
-        server.starttls()
-        server.login(from_addr, password)
-        server.sendmail(from_addr, emails, BODY)
-        server.quit()
+    BODY = "\r\n".join((
+        "From: %s" % from_addr,
+        "To: %s" % ', '.join(emails),
+        "Subject: %s" % subject,
+        "",
+        body_text
+    ))
+    print(BODY)
+    server = smtplib.SMTP(host, 587)
+    server.starttls()
+    server.login(from_addr, password)
+    server.sendmail(from_addr, emails, BODY)
+    server.quit()
 
 
 HOST = "smtp.yandex.ru"
@@ -66,4 +80,64 @@ SUBJECT = "New lead from telegram-bot"
 EMAILS = ["saberullin@condor-platform.com", 'minxerz102@hotmail.com']
 FROM_ADDR = "dubinin@condor-platform.com"
 
-bot.polling(none_stop=True)
+''' ========= END GET LIST ============ '''
+
+''' ========= MORE INFO ============ '''
+
+
+@bot.message_handler(content_types=['text'])
+def start_text(message):
+    if message.text == "more info":
+        print('more_info started')
+        bot.send_message(message.chat.id, "Пожалйста, выберите контент о компании", reply_markup=kb.callback_buttons)
+
+
+@bot.callback_query_handler(func=lambda c: c.data == 'content1')
+def content1(c):
+    bot.send_message(c.message.chat.id, 'Пока без контента №1')
+
+
+@bot.callback_query_handler(func=lambda c: c.data == 'content2')
+def content2(c):
+    bot.send_message(c.message.chat.id, 'Пока без контента №2')
+
+
+@bot.callback_query_handler(func=lambda c: c.data == 'content3')
+def content3(c):
+    bot.send_message(c.message.chat.id, 'Сайтик зацените, он не китайский)', reply_markup=kb.site_button)
+
+
+''' ========= END MORE INFO ============ '''
+
+
+''' ========= SCHEDULE MESSAGE ============ '''
+
+
+def send_content_1(user_id):
+    print('sch cont 1')
+    bot.send_message(user_id, ("отложенный контент 1, дилей 10с"))
+
+def send_content_2(user_id):
+    print('sch cont 2')
+    bot.send_message(user_id, ("отложенный контент 2, дилей 5с"))
+
+def send_content_3(user_id):
+    print('sch cont 3')
+    bot.send_message(user_id, ("отложенный контент 3, дилей 3с"))
+
+def schedule_content(user_id):
+    s = sched.scheduler(time.time, time.sleep)
+    s.enter(delay= 10, priority=1, action = send_content_1(user_id))
+    s.enter(115, 2, send_content_2(user_id))
+    s.enter(18, 3, send_content_3(user_id))
+    s.run(blocking = False)
+
+
+''' ========= END SCHEDULE MESSAGE ============ '''
+
+if __name__ == '__main__':
+    #start_process()
+    try:
+        bot.polling(none_stop=True)
+    except:
+        pass
