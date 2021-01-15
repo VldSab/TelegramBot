@@ -88,12 +88,12 @@ FROM_ADDR = "dubinin@condor-platform.com"
 @bot.message_handler(content_types=['text'])
 def start_text(message):
     if message.text == "Материалы":
-        print('more_info started')
         bot.send_message(message.chat.id, "Пожалуйста, выберите контент о компании", reply_markup=kb.callback_buttons)
 
 
 @bot.callback_query_handler(func=lambda c: c.data == 'content1')
 def content1(c):
+    print('more_info video')
     bot.send_message(c.message.chat.id, 'Если вы экспортёр или импортёр, используйте нашу систему 14 дней бесплатно! '
                                         'Мы помогаем на каждом этапе ВЭД, все возможности смотрите в этом видео \n'
                                         'https://youtu.be/lo78BjrG-r8',
@@ -102,6 +102,7 @@ def content1(c):
 
 @bot.callback_query_handler(func=lambda c: c.data == 'content2')
 def content2(c):
+    print('more_info test')
     bot.send_message(c.message.chat.id, 'Пройдите тест и узнайте сколько стоит решить ваши задачи по ВЭД!', reply_markup=kb.content_test_button)
 
 
@@ -110,7 +111,7 @@ def content3(c):
     #bot.send_message(c.message.chat.id, 'Таможенные издержки могут стоить бизнесу слишком дорого. '
     #                                    'Эта статья поможет вовремя обратить внимание на все подводные камни и не потерять деньги и время!',
     #                 reply_markup=kb.content_article_button)
-
+    print('more_info article')
     photo = open('content_photo.png', 'rb')
     bot.send_photo(c.message.chat.id, photo, caption= 'Таможенные издержки могут стоить бизнесу слишком дорого. '
                                         'Эта статья поможет вовремя обратить внимание на все подводные камни и не потерять деньги и время!',
@@ -118,6 +119,7 @@ def content3(c):
 
 @bot.callback_query_handler(func=lambda c: c.data == 'content4')
 def content4(c):
+    print('more_info site')
     bot.send_message(c.message.chat.id, 'Сайтик зацените, он не китайский)', reply_markup=kb.site_button)
 
 
