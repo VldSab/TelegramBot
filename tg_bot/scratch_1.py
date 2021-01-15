@@ -43,13 +43,13 @@ def contact(message):
     # decoded = json.loads(cont)
     df = pd.DataFrame([cont])
 
-    dleads = pd.read_csv('leads.csv')
-    # print(df)
+    dleads = pd.read_csv('leads.csv', encoding='utf-16')
+    #print(df)
     if df.user_id[0] not in np.array(dleads.user_id):
         print(' ---- NEW CONTACT ----')
         dleads = pd.concat([dleads, df], axis=0)
-        print(dleads)
-        dleads.to_csv('leads.csv', index=False)
+        print(df)
+        dleads.to_csv('leads.csv', index=False, encoding='utf-16')
         send_email(HOST, SUBJECT, EMAILS, FROM_ADDR, str(message.contact), PASSWORD)
 
 
@@ -64,8 +64,8 @@ def send_email(host, subject, emails, from_addr, body_text, password):
         "Subject: %s" % subject,
         "",
         body_text
-    ))
-    print(BODY)
+    )).encode('utf-8')
+    #print(BODY)
     server = smtplib.SMTP(host, 587)
     server.starttls()
     server.login(from_addr, password)
