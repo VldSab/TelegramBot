@@ -19,7 +19,7 @@ print('READY FOR WORK')
 
 @bot.message_handler(commands=['start'])
 def start(message):
-    bot.send_message(message.chat.id, "Привет, {0.first_name}!".format(message.from_user, bot.get_me()),
+    bot.send_message(message.chat.id, "Здравствуйте, {0.first_name}! Скачивайте список проверенных партнеров по кнопке «Получить список»".format(message.from_user, bot.get_me()),
                      reply_markup=kb.button_download)
     #schedule_content(message.chat.id)
 
@@ -94,16 +94,24 @@ def start_text(message):
 
 @bot.callback_query_handler(func=lambda c: c.data == 'content1')
 def content1(c):
-    bot.send_message(c.message.chat.id, 'Пока без контента №1')
-
+    bot.send_message(c.message.chat.id, 'Если вы экспортёр или импортёр, используйте нашу систему 14 дней бесплатно! '
+                                        'Мы помогаем на каждом этапе ВЭД, все возможности смотрите в этом видео',
+                     reply_markup=kb.content_video_button)
 
 @bot.callback_query_handler(func=lambda c: c.data == 'content2')
 def content2(c):
-    bot.send_message(c.message.chat.id, 'Пока без контента №2')
+    bot.send_message(c.message.chat.id, 'Пройдите тест и узнайте сколько стоит решить ваши задачи по ВЭД!)', reply_markup=kb.content_test_button)
 
 
 @bot.callback_query_handler(func=lambda c: c.data == 'content3')
 def content3(c):
+    bot.send_message(c.message.chat.id, 'Таможенные издержки могут стоить бизнесу слишком дорого. '
+                                        'Эта статья поможет вовремя обратить внимание на все подводные камни и не потерять деньги и время!',
+                     reply_markup=kb.content_article_button)
+
+
+@bot.callback_query_handler(func=lambda c: c.data == 'content4')
+def content4(c):
     bot.send_message(c.message.chat.id, 'Сайтик зацените, он не китайский)', reply_markup=kb.site_button)
 
 

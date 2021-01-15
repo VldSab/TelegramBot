@@ -8,7 +8,7 @@ import telebot
 # greet_kb1 = telebot.types.ReplyKeyboardMarkup(resize_keyboard=True).add(button_download)
 
 button_download = telebot.types.ReplyKeyboardMarkup(resize_keyboard=True).add(
-    telebot.types.KeyboardButton('get list', request_contact=True)
+    telebot.types.KeyboardButton('Получить список', request_contact=True)
 )
 
 button_content = telebot.types.ReplyKeyboardMarkup(resize_keyboard=True).add(
@@ -19,10 +19,23 @@ button_content = telebot.types.ReplyKeyboardMarkup(resize_keyboard=True).add(
 callback_buttons = telebot.types.InlineKeyboardMarkup().add(
     telebot.types.InlineKeyboardButton('conten 1', callback_data='content1'),
     telebot.types.InlineKeyboardButton('conten 2', callback_data='content2'),
-    telebot.types.InlineKeyboardButton('conten 3', callback_data='content3')
+    telebot.types.InlineKeyboardButton('conten 3', callback_data='content3'),
+    telebot.types.InlineKeyboardButton('conten 4', callback_data='content4')
 
 )
 
 site_button = telebot.types.InlineKeyboardMarkup().add(
     telebot.types.InlineKeyboardButton('Condor', callback_data='site', url='https://www.webpilots.ru/condor')
+)
+
+content_video_button = telebot.types.InlineKeyboardMarkup().add(
+    telebot.types.InlineKeyboardButton('video', callback_data='site', url='https://www.webpilots.ru/condor')
+)
+
+content_test_button = telebot.types.InlineKeyboardMarkup().add(
+    telebot.types.InlineKeyboardButton('test', callback_data='site', url='https://www.webpilots.ru/condor/test')
+)
+
+content_article_button = telebot.types.InlineKeyboardMarkup().add(
+    telebot.types.InlineKeyboardButton('article', callback_data='site', url='https://www.webpilots.ru/condor')
 )
