@@ -35,11 +35,11 @@ def contact(message):
             'last_name': message.contact.last_name,
             'user_id': message.contact.user_id, 'vcard': message.contact.vcard}
     print(cont)
-    bot.send_message(message.chat.id, 'Спасибо, файл будет у Вас через несколько секунд',
-                     reply_markup=kb.button_content)
+    bot.send_message(message.chat.id, 'Спасибо, файл будет у Вас через несколько секунд')
     doc = open('output.xlsx', 'rb')
     bot.send_document(message.chat.id, doc)
-
+    bot.send_message(message.chat.id, 'По кнопке «Материалы» полезная информация бесплатно!',
+                     reply_markup=kb.button_content)
     # decoded = json.loads(cont)
     df = pd.DataFrame([cont])
 
@@ -87,7 +87,7 @@ FROM_ADDR = "dubinin@condor-platform.com"
 
 @bot.message_handler(content_types=['text'])
 def start_text(message):
-    if message.text == "more info":
+    if message.text == "Материалы":
         print('more_info started')
         bot.send_message(message.chat.id, "Пожалйста, выберите контент о компании", reply_markup=kb.callback_buttons)
 
@@ -100,7 +100,7 @@ def content1(c):
 
 @bot.callback_query_handler(func=lambda c: c.data == 'content2')
 def content2(c):
-    bot.send_message(c.message.chat.id, 'Пройдите тест и узнайте сколько стоит решить ваши задачи по ВЭД!)', reply_markup=kb.content_test_button)
+    bot.send_message(c.message.chat.id, 'Пройдите тест и узнайте сколько стоит решить ваши задачи по ВЭД!', reply_markup=kb.content_test_button)
 
 
 @bot.callback_query_handler(func=lambda c: c.data == 'content3')
