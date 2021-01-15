@@ -95,8 +95,10 @@ def start_text(message):
 @bot.callback_query_handler(func=lambda c: c.data == 'content1')
 def content1(c):
     bot.send_message(c.message.chat.id, 'Если вы экспортёр или импортёр, используйте нашу систему 14 дней бесплатно! '
-                                        'Мы помогаем на каждом этапе ВЭД, все возможности смотрите в этом видео',
+                                        'Мы помогаем на каждом этапе ВЭД, все возможности смотрите в этом видео \n'
+                                        'https://youtu.be/lo78BjrG-r8',
                      reply_markup=kb.content_video_button)
+
 
 @bot.callback_query_handler(func=lambda c: c.data == 'content2')
 def content2(c):
@@ -105,10 +107,14 @@ def content2(c):
 
 @bot.callback_query_handler(func=lambda c: c.data == 'content3')
 def content3(c):
-    bot.send_message(c.message.chat.id, 'Таможенные издержки могут стоить бизнесу слишком дорого. '
+    #bot.send_message(c.message.chat.id, 'Таможенные издержки могут стоить бизнесу слишком дорого. '
+    #                                    'Эта статья поможет вовремя обратить внимание на все подводные камни и не потерять деньги и время!',
+    #                 reply_markup=kb.content_article_button)
+
+    photo = open('1.91.1_Монтажная область 1 копия 3.png', 'rb')
+    bot.send_photo(c.message.chat.id, photo, caption= 'Таможенные издержки могут стоить бизнесу слишком дорого. '
                                         'Эта статья поможет вовремя обратить внимание на все подводные камни и не потерять деньги и время!',
                      reply_markup=kb.content_article_button)
-
 
 @bot.callback_query_handler(func=lambda c: c.data == 'content4')
 def content4(c):
