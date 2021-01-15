@@ -36,7 +36,7 @@ def contact(message):
             'user_id': message.contact.user_id, 'vcard': message.contact.vcard}
     print(cont)
     bot.send_message(message.chat.id, 'Спасибо, файл будет у Вас через несколько секунд')
-    doc = open('output.xlsx', 'rb')
+    doc = open('partners.docx', 'rb')
     bot.send_document(message.chat.id, doc)
     bot.send_message(message.chat.id, 'По кнопке «Материалы» полезная информация бесплатно!',
                      reply_markup=kb.button_content)
