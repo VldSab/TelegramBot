@@ -89,7 +89,7 @@ FROM_ADDR = "dubinin@condor-platform.com"
 def start_text(message):
     if message.text == "Материалы":
         print('more_info started')
-        bot.send_message(message.chat.id, "Пожалйста, выберите контент о компании", reply_markup=kb.callback_buttons)
+        bot.send_message(message.chat.id, "Пожалуйста, выберите контент о компании", reply_markup=kb.callback_buttons)
 
 
 @bot.callback_query_handler(func=lambda c: c.data == 'content1')
@@ -111,7 +111,7 @@ def content3(c):
     #                                    'Эта статья поможет вовремя обратить внимание на все подводные камни и не потерять деньги и время!',
     #                 reply_markup=kb.content_article_button)
 
-    photo = open('1.91.1_Монтажная область 1 копия 3.png', 'rb')
+    photo = open('content_photo.png', 'rb')
     bot.send_photo(c.message.chat.id, photo, caption= 'Таможенные издержки могут стоить бизнесу слишком дорого. '
                                         'Эта статья поможет вовремя обратить внимание на все подводные камни и не потерять деньги и время!',
                      reply_markup=kb.content_article_button)
