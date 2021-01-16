@@ -19,8 +19,14 @@ print('READY FOR WORK')
 
 @bot.message_handler(commands=['start'])
 def start(message):
-    bot.send_message(message.chat.id, "Здравствуйте, {0.first_name}! Скачивайте список проверенных партнеров по кнопке «Получить список»".format(message.from_user, bot.get_me()),
-                     reply_markup=kb.button_download)
+    print('start')
+    try:
+        bot.send_message(message.chat.id, "Здравствуйте, {0.first_name}! Скачивайте список проверенных партнеров по кнопке «Получить список»".format(message.from_user, bot.get_me()),
+                         reply_markup=kb.button_download)
+    except:
+        print('error start')
+        bot.send_message(114330137,
+                         "Ошибка на старте была")
     #schedule_content(message.chat.id)
 
 
@@ -31,26 +37,35 @@ def start(message):
 
 @bot.message_handler(content_types=['contact'])
 def contact(message):
-    cont = {'phone_number': message.contact.phone_number, 'first_name': message.contact.first_name,
-            'last_name': message.contact.last_name,
-            'user_id': message.contact.user_id, 'vcard': message.contact.vcard}
-    print(cont)
-    bot.send_message(message.chat.id, 'Спасибо, файл будет у Вас через несколько секунд')
-    doc = open('partners.docx', 'rb')
-    bot.send_document(message.chat.id, doc)
-    bot.send_message(message.chat.id, 'По кнопке «Материалы» полезная информация бесплатно!',
-                     reply_markup=kb.button_content)
-    # decoded = json.loads(cont)
-    df = pd.DataFrame([cont])
-
-    dleads = pd.read_csv('leads.csv', encoding='utf-16')
-    #print(df)
-    if df.user_id[0] not in np.array(dleads.user_id):
-        print(' ---- NEW CONTACT ----')
-        dleads = pd.concat([dleads, df], axis=0)
-        print(df)
-        dleads.to_csv('leads.csv', index=False, encoding='utf-16')
-        send_email(HOST, SUBJECT, EMAILS, FROM_ADDR, str(message.contact), PASSWORD)
+    try:
+        cont = {'phone_number': message.contact.phone_number, 'first_name': message.contact.first_name,
+                'last_name': message.contact.last_name,
+                'user_id': message.contact.user_id, 'vcard': message.contact.vcard}
+        print(cont)
+        bot.send_message(message.chat.id, 'Спасибо, файл будет у Вас через несколько секунд')
+        doc = open('partners.docx', 'rb')
+        bot.send_document(message.chat.id, doc)
+        bot.send_message(message.chat.id, 'По кнопке «Материалы» полезная информация бесплатно!',
+                         reply_markup=kb.button_content)
+        # decoded = json.loads(cont)
+        df = pd.DataFrame([cont])
+    except:
+        print('error get list')
+        bot.send_message(114330137,
+                         "Ошибка на получении листа")
+    try:
+        dleads = pd.read_csv('leads.csv', encoding='utf-16')
+        #print(df)
+        if df.user_id[0] not in np.array(dleads.user_id):
+            print(' ---- NEW CONTACT ----')
+            dleads = pd.concat([dleads, df], axis=0)
+            print(df)
+            dleads.to_csv('leads.csv', index=False, encoding='utf-16')
+            send_email(HOST, SUBJECT, EMAILS, FROM_ADDR, str(message.contact), PASSWORD)
+    except:
+        print('error email')
+        bot.send_message(114330137,
+                         "Ошибка на отправке имейла")
 
 
 def send_email(host, subject, emails, from_addr, body_text, password):
@@ -93,29 +108,39 @@ def start_text(message):
 
 @bot.callback_query_handler(func=lambda c: c.data == 'content1')
 def content1(c):
-    print('more_info video')
-    bot.send_message(c.message.chat.id, 'Если вы экспортёр или импортёр, используйте нашу систему 14 дней бесплатно! '
-                                        'Мы помогаем на каждом этапе ВЭД, все возможности смотрите в этом видео \n'
-                                        'https://youtu.be/lo78BjrG-r8',
-                     reply_markup=kb.content_video_button)
-
+    try:
+        print('more_info video')
+        bot.send_message(c.message.chat.id, 'Если вы экспортёр или импортёр, используйте нашу систему 14 дней бесплатно! '
+                                            'Мы помогаем на каждом этапе ВЭД, все возможности смотрите в этом видео \n'
+                                            'https://youtu.be/lo78BjrG-r8',
+                         reply_markup=kb.content_video_button)
+    except:
+        print('error video')
+        bot.send_message(114330137,
+                         "Ошибка на video")
 
 @bot.callback_query_handler(func=lambda c: c.data == 'content2')
 def content2(c):
-    print('more_info test')
-    bot.send_message(c.message.chat.id, 'Пройдите тест и узнайте сколько стоит решить ваши задачи по ВЭД!', reply_markup=kb.content_test_button)
-
+    try:
+        print('more_info test')
+        bot.send_message(c.message.chat.id, 'Пройдите тест и узнайте сколько стоит решить ваши задачи по ВЭД!', reply_markup=kb.content_test_button)
+    except:
+        print('error test')
+        bot.send_message(114330137,
+                         "Ошибка на test")
 
 @bot.callback_query_handler(func=lambda c: c.data == 'content3')
 def content3(c):
-    #bot.send_message(c.message.chat.id, 'Таможенные издержки могут стоить бизнесу слишком дорого. '
-    #                                    'Эта статья поможет вовремя обратить внимание на все подводные камни и не потерять деньги и время!',
-    #                 reply_markup=kb.content_article_button)
-    print('more_info article')
-    photo = open('content_photo.png', 'rb')
-    bot.send_photo(c.message.chat.id, photo, caption= 'Таможенные издержки могут стоить бизнесу слишком дорого. '
-                                        'Эта статья поможет вовремя обратить внимание на все подводные камни и не потерять деньги и время!',
-                     reply_markup=kb.content_article_button)
+    try:
+        print('more_info article')
+        photo = open('content_photo.png', 'rb')
+        bot.send_photo(c.message.chat.id, photo, caption= 'Таможенные издержки могут стоить бизнесу слишком дорого. '
+                                            'Эта статья поможет вовремя обратить внимание на все подводные камни и не потерять деньги и время!',
+                         reply_markup=kb.content_article_button)
+    except:
+        print('error article')
+        bot.send_message(114330137,
+                         "Ошибка на article")
 
 @bot.callback_query_handler(func=lambda c: c.data == 'content4')
 def content4(c):
@@ -156,4 +181,6 @@ if __name__ == '__main__':
     try:
         bot.polling(none_stop=True)
     except:
+        bot.send_message(114330137,
+                         "Ошибка сама по себе")
         pass
