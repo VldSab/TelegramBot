@@ -29,13 +29,13 @@ site_button = telebot.types.InlineKeyboardMarkup().add(
 )
 
 content_video_button = telebot.types.InlineKeyboardMarkup().add(
-    telebot.types.InlineKeyboardButton('video', callback_data='site', url='https://www.webpilots.ru/condor')
+    telebot.types.InlineKeyboardButton('Видео', callback_data='site', url='https://youtu.be/IavQvhUl9Ow')
 )
 
 content_test_button = telebot.types.InlineKeyboardMarkup().add(
-    telebot.types.InlineKeyboardButton('test', callback_data='site', url='https://www.webpilots.ru/condor/test')
+    telebot.types.InlineKeyboardButton('Пройти тест', callback_data='site', url='https://www.webpilots.ru/condor/test')
 )
 
 content_article_button = telebot.types.InlineKeyboardMarkup().add(
-    telebot.types.InlineKeyboardButton('article', callback_data='site', url='https://www.webpilots.ru/condor')
+    telebot.types.InlineKeyboardButton('Статья', callback_data='site', url='https://www.webpilots.ru/condor')
 )

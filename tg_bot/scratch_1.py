@@ -112,7 +112,7 @@ def content1(c):
         print('more_info video')
         bot.send_message(c.message.chat.id, 'Если вы экспортёр или импортёр, используйте нашу систему 14 дней бесплатно! '
                                             'Мы помогаем на каждом этапе ВЭД, все возможности смотрите в этом видео \n'
-                                            'https://youtu.be/lo78BjrG-r8',
+                                            'https://youtu.be/IavQvhUl9Ow',
                          reply_markup=kb.content_video_button)
     except:
         print('error video')
@@ -123,7 +123,7 @@ def content1(c):
 def content2(c):
     try:
         print('more_info test')
-        bot.send_message(c.message.chat.id, 'Пройдите тест и узнайте сколько стоит решить ваши задачи по ВЭД!', reply_markup=kb.content_test_button)
+        bot.send_message(c.message.chat.id, 'Пройдите тест и узнайте, сколько стоит решить ваши задачи по ВЭД!', reply_markup=kb.content_test_button)
     except:
         print('error test')
         bot.send_message(114330137,
