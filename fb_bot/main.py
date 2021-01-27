@@ -106,13 +106,13 @@ def hello():
                             bot.send_button_message(recipient_id, text, buttons)
 
                         elif message == "Пройти тест":
-                            buttons = [Button(title='Пройти тест', type='web_url', url='https://www.webpilots.ru/condor/test')]
+                            buttons = [Button(title='Пройти тест', type='web_url', url='https://www.condor-platform.ru/test')]
                             text = 'Пройдите тест и узнайте, сколько стоит решить ваши задачи по ВЭД!'
                             bot.send_button_message(recipient_id, text, buttons)
 
                         elif message == "Сайт":
                             buttons = [
-                                Button(title='Сайт CONDOR', type='web_url', url='https://www.webpilots.ru/condor')]
+                                Button(title='Сайт CONDOR', type='web_url', url='https://www.condor-platform.ru/')]
                             text = 'Сайтик зацените, он не китайский)'
                             bot.send_button_message(recipient_id, text, buttons)
 
@@ -146,6 +146,13 @@ def hello():
                             button = Button(title='Материалы', type='postback', payload='materials')
                             buttons.append(button)
                             text = 'По кнопке «Материалы» полезная информация бесплатно!'
+                            bot.send_button_message(recipient_id, text, buttons)
+                        else:
+                            buttons = []
+                            button = Button(title='Связаться с менеджером', type='postback', payload='call_to_manager')
+                            buttons.append(button)
+                            text = 'Для получения доступа к списку партнеров, пожалуйста, подтвердите регистрацию, указав Ваш номер телефона.' \
+                                   'Если Вы хотите связаться с менеджером, нажмите на кнопку «Связаться с менеджером»'
                             bot.send_button_message(recipient_id, text, buttons)
                     except ValueError:
                         buttons = []
