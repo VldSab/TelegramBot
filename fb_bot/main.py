@@ -45,7 +45,7 @@ def send_email(host, subject, emails, from_addr, body_text, password):
 HOST = "smtp.yandex.ru"
 PASSWORD = '694768Alexis'
 
-SUBJECT = "New lead from telegram-bot"
+SUBJECT = "New lead from facebook-bot"
 EMAILS = ["saberullin@condor-platform.com", 'minxerz102@hotmail.com']
 FROM_ADDR = "dubinin@condor-platform.com"
 
