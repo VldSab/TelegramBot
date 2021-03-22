@@ -38,10 +38,11 @@ def start(message):
 @bot.message_handler(content_types=['contact'])
 def contact(message):
     try:
-        cont = {'phone_number': message.contact.phone_number, 'first_name': message.contact.first_name,
-                'last_name': message.contact.last_name,
+   # if True:
+        cont = {'phone_number': message.contact.phone_number,# 'first_name': message.contact.first_name,
+                # 'last_name': message.contact.last_name,
                 'user_id': message.contact.user_id, 'vcard': message.contact.vcard}
-        print(cont)
+       # print(cont)
         bot.send_message(message.chat.id, 'Спасибо, файл будет у Вас через несколько секунд')
         doc = open('partners_china.pdf', 'rb')
         bot.send_document(message.chat.id, doc)
@@ -53,19 +54,20 @@ def contact(message):
         print('error get list')
         bot.send_message(114330137,
                          "Ошибка на получении листа")
-    try:
+   # try:
+    if True:
         dleads = pd.read_csv('leads.csv', encoding='utf-16')
         #print(df)
         if df.user_id[0] not in np.array(dleads.user_id):
             print(' ---- NEW CONTACT ----')
             dleads = pd.concat([dleads, df], axis=0)
-            print(df)
+  #          print(df)
             dleads.to_csv('leads.csv', index=False, encoding='utf-16')
             send_email(HOST, SUBJECT, EMAILS, FROM_ADDR, str(message.contact), PASSWORD)
-    except:
-        print('error email')
-        bot.send_message(114330137,
-                         "Ошибка на отправке имейла")
+ #   except:
+ #       print('error email')
+ #       bot.send_message(114330137,
+ #                        "Ошибка на отправке имейла")
 
 
 def send_email(host, subject, emails, from_addr, body_text, password):
@@ -178,9 +180,9 @@ def schedule_content(user_id):
 
 if __name__ == '__main__':
     #start_process()
-    try:
-        bot.polling(none_stop=True)
-    except:
-        bot.send_message(114330137,
-                         "Ошибка сама по себе")
-        pass
+    
+    bot.polling(none_stop=True)
+    #except:
+    #    bot.send_message(114330137,
+    #                     "Ошибка сама по себе")
+    #    pass
