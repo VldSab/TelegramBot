@@ -89,10 +89,10 @@ def send_email(host, subject, emails, from_addr, body_text, password):
 
 
 HOST = "smtp.yandex.ru"
-PASSWORD = '694768Alexis'
+PASSWORD = 'condor12345'
 
 SUBJECT = "New lead from telegram-bot"
-EMAILS = ["saberullin@condor-platform.com", 'minxerz102@hotmail.com']
+EMAILS = ["saberullin@condor-platform.com", 'post@condor-platform.com']
 FROM_ADDR = "dubinin@condor-platform.com"
 
 ''' ========= END GET LIST ============ '''
@@ -145,7 +145,7 @@ def content3(c):
 @bot.callback_query_handler(func=lambda c: c.data == 'content4')
 def content4(c):
     print('more_info site')
-    bot.send_message(c.message.chat.id, 'Сайтик зацените, он не китайский)', reply_markup=kb.site_button)
+    bot.send_message(c.message.chat.id, 'Перейти на сайт', reply_markup=kb.site_button)
 
 
 ''' ========= END MORE INFO ============ '''
