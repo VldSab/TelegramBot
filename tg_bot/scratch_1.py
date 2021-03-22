@@ -39,8 +39,8 @@ def start(message):
 def contact(message):
     try:
    # if True:
-        cont = {'phone_number': message.contact.phone_number,# 'first_name': message.contact.first_name,
-                # 'last_name': message.contact.last_name,
+        cont = {'phone_number': message.contact.phone_number, #'first_name': message.contact.first_name,
+                #'last_name': message.contact.last_name,
                 'user_id': message.contact.user_id, 'vcard': message.contact.vcard}
        # print(cont)
         bot.send_message(message.chat.id, 'Спасибо, файл будет у Вас через несколько секунд')
