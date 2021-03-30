@@ -21,7 +21,7 @@ print('READY FOR WORK')
 def start(message):
     print('start')
     try:
-        bot.send_message(message.chat.id, "Здравствуйте, {0.first_name}! Скачивайте список проверенных партнеров по кнопке «Получить список»".format(message.from_user, bot.get_me()),
+        bot.send_message(message.chat.id, "Вас приветствует бот платформу Condor. Сайт платформы: https://ru.condor-platform.com/ \n Страница в FB: https://www.facebook.com/st.condor.platform/ \n Скачивайте список проверенных партнеров по кнопке «Получить список»".format(message.from_user, bot.get_me()),
                          reply_markup=kb.button_download)
     except:
         print('error start')
