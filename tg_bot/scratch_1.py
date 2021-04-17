@@ -8,9 +8,6 @@ import telebot
 import sched
 import time
 
-
-
-
 bot = telebot.TeleBot(config.TOKEN)
 print('READY FOR WORK')
 
@@ -27,8 +24,6 @@ def start(message):
         print('error start')
         bot.send_message(114330137,
                          "Ошибка на старте была")
-    #schedule_content(message.chat.id)
-
 
 ''' ========= END START ========= '''
 
@@ -38,43 +33,31 @@ def start(message):
 @bot.message_handler(content_types=['contact'])
 def contact(message):
     try:
-   # if True:
         cont = {'phone_number': message.contact.phone_number, #'first_name': message.contact.first_name,
-                #'last_name': message.contact.last_name,
                 'user_id': message.contact.user_id, 'vcard': message.contact.vcard}
-       # print(cont)
         bot.send_message(message.chat.id, 'Спасибо, файл будет у Вас через несколько секунд')
         doc = open('partners_china.pdf', 'rb')
         bot.send_document(message.chat.id, doc)
         bot.send_message(message.chat.id, 'По кнопке «Материалы» полезная информация бесплатно!',
                          reply_markup=kb.button_content)
-        # decoded = json.loads(cont)
         df = pd.DataFrame([cont])
     except:
         print('error get list')
         bot.send_message(114330137,
                          "Ошибка на получении листа")
-   # try:
     if True:
         dleads = pd.read_csv('leads.csv', encoding='utf-16')
-        #print(df)
         if df.user_id[0] not in np.array(dleads.user_id):
             print(' ---- NEW CONTACT ----')
             dleads = pd.concat([dleads, df], axis=0)
-  #          print(df)
             dleads.to_csv('leads.csv', index=False, encoding='utf-16')
             send_email(HOST, SUBJECT, EMAILS, FROM_ADDR, str(message.contact), PASSWORD)
- #   except:
- #       print('error email')
- #       bot.send_message(114330137,
- #                        "Ошибка на отправке имейла")
-
+            
 
 def send_email(host, subject, emails, from_addr, body_text, password):
     """
         Send an email
     """
-
     BODY = "\r\n".join((
         "From: %s" % from_addr,
         "To: %s" % ', '.join(emails),
@@ -82,17 +65,15 @@ def send_email(host, subject, emails, from_addr, body_text, password):
         "",
         body_text
     )).encode('utf-8')
-    #print(BODY)
     server = smtplib.SMTP(host, 587)
     server.starttls()
     server.login(from_addr, password)
     server.sendmail(from_addr, emails, BODY)
     server.quit()
 
-
+    
 HOST = "smtp.yandex.ru"
 PASSWORD = 'condor12345'
-
 SUBJECT = "New lead from telegram-bot"
 EMAILS = ["saberullin@condor-platform.com", 'post@condor-platform.com']
 FROM_ADDR = "dubinin@condor-platform.com"
@@ -100,7 +81,6 @@ FROM_ADDR = "dubinin@condor-platform.com"
 ''' ========= END GET LIST ============ '''
 
 ''' ========= MORE INFO ============ '''
-
 
 @bot.message_handler(content_types=['text'])
 def start_text(message):
@@ -121,6 +101,7 @@ def content1(c):
         bot.send_message(114330137,
                          "Ошибка на video")
 
+        
 @bot.callback_query_handler(func=lambda c: c.data == 'content2')
 def content2(c):
     try:
@@ -131,6 +112,7 @@ def content2(c):
         bot.send_message(114330137,
                          "Ошибка на test")
 
+        
 @bot.callback_query_handler(func=lambda c: c.data == 'content3')
 def content3(c):
     try:
@@ -144,6 +126,7 @@ def content3(c):
         bot.send_message(114330137,
                          "Ошибка на article")
 
+        
 @bot.callback_query_handler(func=lambda c: c.data == 'content4')
 def content4(c):
     print('more_info site')
@@ -179,10 +162,5 @@ def schedule_content(user_id):
 ''' ========= END SCHEDULE MESSAGE ============ '''
 
 if __name__ == '__main__':
-    #start_process()
-    
     bot.polling(none_stop=True)
-    #except:
-    #    bot.send_message(114330137,
-    #                     "Ошибка сама по себе")
-    #    pass
+
