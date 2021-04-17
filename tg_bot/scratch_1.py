@@ -1,5 +1,4 @@
 import smtplib
-
 import config
 import keyboard as kb
 import numpy as np
